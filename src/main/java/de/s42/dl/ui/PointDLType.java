@@ -47,6 +47,10 @@ public class PointDLType extends DefaultDLType
 	{
 		assert sources != null;
 		
+		if ((sources.length == 1) && sources[0] == null) {
+			return null;
+		}		
+				
 		if ((sources.length == 1) && sources[0] instanceof Point) {
 			return sources[0];
 		}

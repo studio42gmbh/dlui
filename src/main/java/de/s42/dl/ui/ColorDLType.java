@@ -48,6 +48,10 @@ public class ColorDLType extends DefaultDLType
 	{
 		assert sources != null;
 
+		if ((sources.length == 1) && sources[0] == null) {
+			return null;
+		}		
+				
 		if ((sources.length == 1) && sources[0] instanceof Color) {
 			return sources[0];
 		}
