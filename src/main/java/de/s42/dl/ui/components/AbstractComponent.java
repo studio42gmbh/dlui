@@ -50,12 +50,24 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	@AttributeDL(required = false)
 	protected EventAction onCreate;
 
-	public static Optional<AbstractComponent> getComponent(JComponent jComponent)
+	@AttributeDL(required = false, defaultValue = "0")
+	protected int gridX = 0;
+
+	@AttributeDL(required = false, defaultValue = "0")
+	protected int gridY = 0;
+
+	@AttributeDL(required = false, defaultValue = "0.0")
+	protected float weightX = 0.0f;
+
+	@AttributeDL(required = false, defaultValue = "0.0")
+	protected float weightY = 0.0f;
+
+	public static <AbstractComponentType extends AbstractComponent> Optional<AbstractComponentType> getComponent(JComponent jComponent)
 	{
 		Object comp = jComponent.getClientProperty(COMPONENT_CLIENT_PROPERTY_KEY);
 
 		if (comp instanceof AbstractComponent) {
-			return Optional.of((AbstractComponent) comp);
+			return Optional.of((AbstractComponentType) comp);
 		}
 
 		return Optional.empty();
@@ -63,6 +75,8 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 
 	protected void initComponent(JComponent component)
 	{
+		component.putClientProperty(COMPONENT_CLIENT_PROPERTY_KEY, this);
+
 		Rectangle bounds = getBounds();
 		if (bounds != null) {
 			component.setBounds(bounds);
@@ -71,8 +85,6 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 			component.setMaximumSize(bounds.getSize());
 			component.setMinimumSize(bounds.getSize());
 		}
-
-		component.putClientProperty(COMPONENT_CLIENT_PROPERTY_KEY, this);
 
 		onCreate(component);
 	}
@@ -118,7 +130,7 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	{
 		this.name = name;
 	}
-	
+
 	public EventAction getOnCreate()
 	{
 		return onCreate;
@@ -127,6 +139,54 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	public void setOnCreate(EventAction onCreate)
 	{
 		this.onCreate = onCreate;
-	}	
+	}
+
+	@Override
+	public int getGridX()
+	{
+		return gridX;
+	}
+
+	@Override
+	public void setGridX(int gridX)
+	{
+		this.gridX = gridX;
+	}
+
+	@Override
+	public int getGridY()
+	{
+		return gridY;
+	}
+
+	@Override
+	public void setGridY(int gridY)
+	{
+		this.gridY = gridY;
+	}
+
+	@Override
+	public float getWeightX()
+	{
+		return weightX;
+	}
+
+	@Override
+	public void setWeightX(float weightX)
+	{
+		this.weightX = weightX;
+	}
+
+	@Override
+	public float getWeightY()
+	{
+		return weightY;
+	}
+
+	@Override
+	public void setWeightY(float weightY)
+	{
+		this.weightY = weightY;
+	}
 	//</editor-fold>	
 }

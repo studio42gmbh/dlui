@@ -26,11 +26,15 @@
 package de.s42.dl.ui.components.window;
 
 import de.s42.dl.DLAttribute.AttributeDL;
+import static de.s42.dl.ui.components.AbstractComponent.COMPONENT_CLIENT_PROPERTY_KEY;
 import de.s42.dl.ui.components.AbstractContainer;
 import de.s42.dl.ui.components.Component;
 import de.s42.dl.ui.events.EventAction;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Optional;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
@@ -46,29 +50,49 @@ public class Window extends AbstractContainer<JFrame>
 
 	@AttributeDL(required = false)
 	protected EventAction onClose;
+	
+	@AttributeDL(required = false, defaultValue = "false")
+	protected boolean maximized = false;
+	
+	public static Optional<Window> getWindow(JFrame jFrame)
+	{
+		Object comp = jFrame.getRootPane().getClientProperty(COMPONENT_CLIENT_PROPERTY_KEY);
 
+		if (comp instanceof Window) {
+			return Optional.of((Window) comp);
+		}
+
+		return Optional.empty();
+	}
+	
 	@Override
 	public JFrame createSwingComponent()
 	{
 		JFrame frame = new JFrame();
-
-		frame.setTitle(getTitle());
+		
+		frame.getRootPane().putClientProperty(COMPONENT_CLIENT_PROPERTY_KEY, this);
 
 		// Do nothing by default on close window
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-		// Set size and fill content pane with view
-		if (getBounds() != null) {
-			frame.setSize(getBounds().getSize());
-			frame.setLocation(getBounds().getLocation());
-		}
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(new GridBagLayout());
 
 		// Iterate components and add them to content pane
 		for (Component component : components) {
 
 			JComponent jComponent = (JComponent) component.createSwingComponent();
-			frame.getContentPane().add(jComponent);
+			
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.BOTH;
+			c.anchor = GridBagConstraints.CENTER;
+			c.gridheight = 1;
+			c.gridwidth = 1;
+			c.gridx = component.getGridX();
+			c.gridy = component.getGridY();
+			c.weightx = component.getWeightX();
+			c.weighty = component.getWeightY();
+			
+			frame.getContentPane().add(jComponent, c);
 		}
 
 		// Add window listeners
@@ -83,13 +107,25 @@ public class Window extends AbstractContainer<JFrame>
 
 		// Send on create instance event
 		onCreate(frame);
+		
+		// Set size and fill content pane with view
+		if (getBounds() != null) {
+			frame.setSize(getBounds().getSize());
+			frame.setLocation(getBounds().getLocation());
+		}
+				
+		frame.setTitle(getTitle());
+		
+		if (isMaximized()) {
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		}
 
 		// Make sure the creation of the window happens in the UI Thread
 		java.awt.EventQueue.invokeLater(() -> {
 
 			// Fit window, center and show
 			//window.pack();
-			frame.setLocationRelativeTo(null);
+			//frame.setLocationRelativeTo(null);
 			frame.setVisible(true);
 		});
 
@@ -128,14 +164,26 @@ public class Window extends AbstractContainer<JFrame>
 		this.onClose = onClose;
 	}
 
+	@Override
 	public EventAction getOnCreate()
 	{
 		return onCreate;
 	}
 
+	@Override
 	public void setOnCreate(EventAction onCreate)
 	{
 		this.onCreate = onCreate;
+	}
+	
+	public boolean isMaximized()
+	{
+		return maximized;
+	}
+
+	public void setMaximized(boolean maximized)
+	{
+		this.maximized = maximized;
 	}
 	//</editor-fold>
 }

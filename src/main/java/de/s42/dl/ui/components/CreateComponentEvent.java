@@ -50,9 +50,9 @@ public class CreateComponentEvent extends DefaultEvent
 	}
 
 	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
-	public AbstractComponent getComponent()
+	public <AbstractComponentType extends AbstractComponent> AbstractComponentType getComponent()
 	{
-		return component;
+		return (AbstractComponentType) component;
 	}
 
 	public void setComponent(AbstractComponent component)

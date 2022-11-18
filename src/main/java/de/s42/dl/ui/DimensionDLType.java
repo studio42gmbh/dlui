@@ -23,41 +23,49 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-package de.s42.dl.ui.components;
+package de.s42.dl.ui;
 
-import java.awt.Rectangle;
+import de.s42.base.conversion.ConversionHelper;
+import de.s42.dl.exceptions.InvalidValue;
+import de.s42.dl.types.DefaultDLType;
+import java.awt.Dimension;
 
 /**
  *
  * @author Benjamin Schiller
- * @param <ComponentType>
  */
-public interface Component<ComponentType>
+public class DimensionDLType extends DefaultDLType
 {
 
-	public ComponentType createSwingComponent();
+	public DimensionDLType()
+	{
+		super(Dimension.class);
+	}
 
-	public Rectangle getBounds();
+	@Override
+	public Object read(Object... sources) throws InvalidValue
+	{
+		assert sources != null;
 
-	public void setBounds(Rectangle bounds);
+		if ((sources.length == 1) && sources[0] == null) {
+			return null;
+		}
 
-	public String getName();
+		if ((sources.length == 1) && sources[0] instanceof Dimension) {
+			return sources[0];
+		}
 
-	public void setName(String name);
+		// Split given a 1 string parameter into 4
+		if ((sources.length == 1) && sources[0] instanceof String) {
+			sources = ((String) sources[0]).split("\\s*,\\s*");
+		}
 
-	public int getGridX();
+		if (sources.length != 2) {
+			throw new InvalidValue(getName() + " has to be <int width>, <int height> but has " + sources.length + " parameters");
+		}
 
-	public void setGridX(int gridX);
+		Integer[] bounds = ConversionHelper.convertArray(sources, Integer.class);
 
-	public int getGridY();
-
-	public void setGridY(int gridY);
-
-	public float getWeightX();
-
-	public void setWeightX(float weightX);
-
-	public float getWeightY();
-
-	public void setWeightY(float weightY);
+		return new Dimension(bounds[0], bounds[1]);
+	}
 }

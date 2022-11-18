@@ -90,6 +90,7 @@ public final class UICoreHelper
 		core.defineType(new RectangleDLType(), "Rectangle");
 		core.defineType(new InsetsDLType(), "Insets");
 		core.defineType(new PointDLType(), "Point");
+		core.defineType(new DimensionDLType(), "Dimension");
 		core.defineType(core.createType(Font.class), "Font");
 
 		// Event types
