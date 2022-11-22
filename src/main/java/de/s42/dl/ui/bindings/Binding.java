@@ -1,8 +1,8 @@
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
-/* 
+/*
  * The MIT License
  * 
- * Copyright 2021 Studio 42 GmbH ( https://www.s42m.de ).
+ * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,20 +23,37 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
+package de.s42.dl.ui.bindings;
 
-module de.sft.dlui
+import java.util.Optional;
+import java.util.function.Consumer;
+
+/**
+ *
+ * @author Benjamin Schiller
+ * @param <ObjectType> The object to which is bound
+ * @param <DataType> The data type of the bound data
+ */
+public interface Binding<ObjectType, DataType>
 {
-	requires java.desktop;
-	requires de.sft.dl;
-	requires de.sft.log;
-	requires de.sft.base;
-	
-	exports de.s42.dl.ui;
-	exports de.s42.dl.ui.actions;
-	exports de.s42.dl.ui.annotations;
-	exports de.s42.dl.ui.bindings;
-	exports de.s42.dl.ui.components;
-	exports de.s42.dl.ui.components.window;
-	exports de.s42.dl.ui.events;
-	exports de.s42.dl.ui.pragmas;
+
+	public ObjectType getObject();
+
+	public String getName();
+
+	public Class<? extends DataType> getDataType();
+
+	public Optional<DataType> getValue();
+
+	public void setValue(DataType value);
+
+	/**
+	 * The binding implementation shall add the given listener with a weak reference
+	 *
+	 * @param listener
+	 * @return
+	 */
+	public boolean addWeakChangeListener(Consumer<Optional<DataType>> listener);
+
+	public boolean removeWeakChangeListener(Consumer<Optional<DataType>> listener);
 }

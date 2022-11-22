@@ -111,7 +111,6 @@ public final class UICoreHelper
 
 		// Component types
 		core.defineType(core.createType(Component.class), "Component");
-		core.defineType(core.createType(CreateComponentEvent.class), "CreateComponentEvent");
 		core.defineType(core.createType(AbstractComponent.class), "AbstractComponent");
 		core.defineType(core.createType(AbstractContainer.class), "AbstractContainer");
 		core.defineType(core.createType(TextComponent.class), "TextComponent");
@@ -121,6 +120,7 @@ public final class UICoreHelper
 		core.defineType(core.createType(Panel.Layout.class), "PanelLayout");
 		core.defineType(core.createType(Panel.class), "Panel");
 		core.defineType(core.createType(Dropdown.class), "Dropdown");
+		core.defineType(core.createType(CreateComponentEvent.class), "CreateComponentEvent");
 
 		// Allow to access window
 		core.defineType(core.createType(Window.class), "Window");
