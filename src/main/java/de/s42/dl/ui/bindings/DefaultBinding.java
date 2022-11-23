@@ -133,7 +133,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	 *
 	 * @param value
 	 */
-	public void updateValue(DataType value)
+	public boolean updateValue(DataType value)
 	{
 		//log.debug("updateValue", getName(), value);
 		// Just update if the value has changed			
@@ -142,7 +142,10 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 			//log.debug("updateValue:update", getName(), value);
 			currentValue = value;
 			updateListeners(value);
+			return true;
 		}
+		
+		return false;
 	}
 
 	protected void updateListeners(DataType value)

@@ -70,8 +70,6 @@ public class ZoneAnnotation extends AbstractDLAnnotation
 		log.debug("Zoned type", zoneId);
 	}
 	
-	
-
 	@Override
 	public void bindToInstance(DLCore core, DLModule module, DLInstance instance, Object... parameters) throws DLException
 	{
