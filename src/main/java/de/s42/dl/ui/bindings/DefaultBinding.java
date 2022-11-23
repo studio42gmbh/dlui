@@ -73,7 +73,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 
 		info = (BeanInfo<ObjectType>) BeanHelper.getBeanInfo(object.getClass());
 
-		property = (BeanProperty<ObjectType, DataType>)info.getProperty(name).orElseThrow(() -> {
+		property = (BeanProperty<ObjectType, DataType>) info.getProperty(name).orElseThrow(() -> {
 			return new InvalidBean("Missing property '" + name + "'");
 		});
 
@@ -117,7 +117,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 			// Just update if the value has changed			
 			if (!Objects.equals(currentValue, value)) {
 
-				//log.debug("update", getName(), value);
+				//log.debug("setValue:update", getName(), value);
 				currentValue = value;
 				property.write(object, value);
 				updateListeners(value);
@@ -125,6 +125,23 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 
 		} catch (InvalidBean ex) {
 			throw new RuntimeException(ex);
+		}
+	}
+
+	/**
+	 * Is intended to be called by referenced data object to lny updtae but not set the property into it again.
+	 *
+	 * @param value
+	 */
+	public void updateValue(DataType value)
+	{
+		//log.debug("updateValue", getName(), value);
+		// Just update if the value has changed			
+		if (!Objects.equals(currentValue, value)) {
+
+			//log.debug("updateValue:update", getName(), value);
+			currentValue = value;
+			updateListeners(value);
 		}
 	}
 
@@ -158,11 +175,11 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	public boolean addWeakChangeListener(Consumer<Optional<DataType>> listener)
 	{
 		assert listener != null;
-		
+
 		synchronized (listeners) {
 
-			if (listeners.stream().noneMatch((t) -> {
-				return Objects.equals(t.get(), listener);
+			if (listeners.stream().noneMatch((ref) -> {
+				return Objects.equals(ref.get(), listener);
 			})) {
 				return listeners.add(new WeakReference(listener));
 			}
@@ -175,7 +192,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	public boolean removeWeakChangeListener(Consumer<Optional<DataType>> listener)
 	{
 		assert listener != null;
-		
+
 		boolean removed = false;
 
 		synchronized (listeners) {
