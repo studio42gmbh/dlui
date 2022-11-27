@@ -27,6 +27,7 @@ package de.s42.dl.ui.pragmas;
 
 import de.s42.base.compile.CompileHelper;
 import de.s42.base.compile.InvalidCompilation;
+import de.s42.base.files.FilesHelper;
 import de.s42.dl.DLCore;
 import de.s42.dl.exceptions.DLException;
 import de.s42.dl.exceptions.InvalidPragma;
@@ -69,7 +70,11 @@ public class LoadPluginClassPragma extends AbstractDLPragma
 			String className = (String) parameters[0];
 			Path classFile = (Path) parameters[1];
 
-			log.debug("Loading plugin class", className, "from file", classFile.toAbsolutePath());
+			//log.debug("Loading plugin class", className, "from file", classFile.toAbsolutePath());
+			
+			log.debug(FilesHelper.createMavenNetbeansFileConsoleLink("Loading plugin class " + className + " from file",
+				classFile.getFileName().toString(),
+				classFile.toAbsolutePath().toString(), 1, 1, false));
 
 			log.start("CompilationTime");
 			Class closeActionClass = CompileHelper.getCompiledClass(
