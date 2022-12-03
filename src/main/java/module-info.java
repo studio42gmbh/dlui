@@ -36,6 +36,8 @@ module de.sft.dlui
 	exports de.s42.dl.ui.annotations;
 	exports de.s42.dl.ui.bindings;
 	exports de.s42.dl.ui.components;
+	exports de.s42.dl.ui.components.button;
+	exports de.s42.dl.ui.components.dropdown;
 	exports de.s42.dl.ui.components.window;
 	exports de.s42.dl.ui.events;
 	exports de.s42.dl.ui.pragmas;

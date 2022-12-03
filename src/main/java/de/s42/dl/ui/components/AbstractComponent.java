@@ -77,7 +77,6 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	{
 		component.putClientProperty(COMPONENT_CLIENT_PROPERTY_KEY, this);
 
-		Rectangle bounds = getBounds();
 		if (bounds != null) {
 			component.setBounds(bounds);
 			component.setPreferredSize(bounds.getSize());

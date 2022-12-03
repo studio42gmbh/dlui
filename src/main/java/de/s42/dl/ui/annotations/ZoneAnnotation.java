@@ -26,12 +26,16 @@
 package de.s42.dl.ui.annotations;
 
 import de.s42.dl.*;
-import de.s42.dl.DLAnnotated.DLMappedAnnotation;
 import de.s42.dl.annotations.AbstractDLAnnotation;
+import de.s42.dl.annotations.DLAnnotationParameter;
+import de.s42.dl.annotations.DLAnnotationType;
 import de.s42.dl.exceptions.DLException;
-import de.s42.dl.exceptions.InvalidAnnotation;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
@@ -42,58 +46,37 @@ public class ZoneAnnotation extends AbstractDLAnnotation
 
 	private final static Logger log = LogManager.getLogger(ZoneAnnotation.class.getName());
 
-	public final static String DEFAULT_SYMBOL = "zone";
-
-	public ZoneAnnotation()
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(value = {ElementType.FIELD})
+	@DLAnnotationType(ZoneAnnotation.class)
+	public static @interface zone
 	{
-		this(DEFAULT_SYMBOL);
+
+		public String zone();
 	}
 
-	public ZoneAnnotation(String name)
+	@DLAnnotationParameter(ordinal = 0, required = true)
+	protected String zone;
+
+	@Override
+	public void bindToType(DLCore core, DLType type) throws DLException
 	{
-		super(name);
+		log.debug("Zoned type", zone);
 	}
 
 	@Override
-	public void bindToType(DLCore core, DLType type, Object... parameters) throws DLException
+	public void bindToInstance(DLCore core, DLInstance instance) throws DLException
 	{
-		assert core != null;
-		assert type != null;
-
-		Object[] params = validateParameters(parameters, new Class[]{String.class});
-		String zoneId = (String) params[0];
-
-		// Ensure a Panel is tagged
-		/*if (!instance.getType().isDerivedTypeOf(core.getType(Panel.class).orElseThrow())) {
-			throw new InvalidAnnotation("the event annotation can only be used to tag Action types");
-		}*/
-		log.debug("Zoned type", zoneId);
+		log.debug("Zoned instance", zone);
 	}
-	
-	@Override
-	public void bindToInstance(DLCore core, DLModule module, DLInstance instance, Object... parameters) throws DLException
+
+	public String getZone()
 	{
-		assert core != null;
-		assert instance != null;
-
-		Object[] params = validateParameters(parameters, new Class[]{String.class});
-		String zoneId = (String) params[0];
-
-		// Ensure a Panel is tagged
-		/*if (!instance.getType().isDerivedTypeOf(core.getType(Panel.class).orElseThrow())) {
-			throw new InvalidAnnotation("the event annotation can only be used to tag Action types");
-		}*/
-		log.debug("Zoned instance", zoneId);
+		return zone;
 	}
-	
-	public static String getZone(DLMappedAnnotation mappedAnnotation) throws InvalidAnnotation 
+
+	public void setZone(String zone)
 	{
-		if (!mappedAnnotation.getAnnotation().getClass().equals(ZoneAnnotation.class)) {
-			throw new InvalidAnnotation("Mapped Annotation is not ZoneAnnotation");
-		}
-		
-		Object[] params = validateParameters(mappedAnnotation.getParameters(), new Class[]{String.class});
-				
-		return (String)params[0];
+		this.zone = zone;
 	}
 }

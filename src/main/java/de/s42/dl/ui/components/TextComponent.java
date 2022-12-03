@@ -39,7 +39,7 @@ public abstract class TextComponent<ComponentType> extends AbstractComponent<Com
 {
 
 	@AttributeDL(required = true)
-	@AnnotationDL(value = LengthDLAnnotation.DEFAULT_SYMBOL, parameters = {"0", "10000"})
+	//@AnnotationDL(value = LengthDLAnnotation.DEFAULT_SYMBOL, parameters = {"0", "10000"})
 	protected String text;
 
 	@AttributeDL

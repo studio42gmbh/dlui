@@ -1,26 +1,14 @@
-// <editor-fold desc="The MIT License" defaultstate="collapsed">
+// <editor-fold desc="The F12 License" defaultstate="collapsed">
 /*
- * The MIT License
+ * Copyright F12 Studio s.r.o 2022. All rights reserved.
  * 
- * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * For details to the License read https://www.f12-studio.com/license
  */
 //</editor-fold>
 package de.s42.dl.ui.pragmas;
@@ -29,6 +17,7 @@ import de.s42.base.compile.CompileHelper;
 import de.s42.base.compile.InvalidCompilation;
 import de.s42.base.files.FilesHelper;
 import de.s42.dl.DLCore;
+import de.s42.dl.core.BaseDLCore;
 import de.s42.dl.exceptions.DLException;
 import de.s42.dl.exceptions.InvalidPragma;
 import de.s42.dl.pragmas.AbstractDLPragma;
@@ -71,7 +60,6 @@ public class LoadPluginClassPragma extends AbstractDLPragma
 			Path classFile = (Path) parameters[1];
 
 			//log.debug("Loading plugin class", className, "from file", classFile.toAbsolutePath());
-			
 			log.debug(FilesHelper.createMavenNetbeansFileConsoleLink("Loading plugin class " + className + " from file",
 				classFile.getFileName().toString(),
 				classFile.toAbsolutePath().toString(), 1, 1, false));
@@ -83,7 +71,10 @@ public class LoadPluginClassPragma extends AbstractDLPragma
 			);
 			log.stopInfo("CompilationTime");
 
+			((BaseDLCore) core).setClassLoader(closeActionClass.getClassLoader());
 			core.defineType(core.createType(closeActionClass));
+			((BaseDLCore) core).setClassLoader(null);
+
 		} catch (InvalidCompilation | DLException | IOException ex) {
 			throw new InvalidPragma("Error loading plugin - " + ex.getMessage(), ex);
 		}

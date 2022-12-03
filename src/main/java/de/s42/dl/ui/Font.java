@@ -40,7 +40,7 @@ public class Font
 	protected String face;
 
 	@AttributeDL(required = true)
-	@AnnotationDL(value = RangeDLAnnotation.DEFAULT_SYMBOL, parameters = {"1", "10000"})
+	//@AnnotationDL(value = RangeDLAnnotation.DEFAULT_SYMBOL, parameters = {"1", "10000"})
 	protected int size;
 
 	@AttributeDL(required = false, defaultValue = "false")

@@ -38,7 +38,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<phase>generate-resources</phase>
@@ -132,7 +132,7 @@
 				<!-- https://maven.apache.org/plugins/maven-install-plugin/ -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.1.0</version>
 			</plugin>
 		</plugins>		
 	</build>	

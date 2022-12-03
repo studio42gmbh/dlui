@@ -82,8 +82,8 @@ public final class UICoreHelper
 		core.definePragma(new LoadPluginClassPragma());
 
 		// Annotations
-		core.defineAnnotation(new ZoneAnnotation());
-		core.defineAnnotation(new EventAnnotation());
+		core.defineAnnotationFactory(new ZoneAnnotation(), ZoneAnnotation.zone.class.getSimpleName());
+		core.defineAnnotationFactory(new EventAnnotation(), EventAnnotation.event.class.getSimpleName());
 
 		// Core types
 		core.defineType(new ColorDLType(), "Color");

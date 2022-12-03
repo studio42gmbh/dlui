@@ -25,13 +25,17 @@
 //</editor-fold>
 package de.s42.dl.ui.events;
 
-import de.s42.dl.exceptions.InvalidAnnotation;
 import de.s42.dl.*;
-import de.s42.dl.DLAnnotated.DLMappedAnnotation;
 import de.s42.dl.annotations.AbstractDLAnnotation;
+import de.s42.dl.annotations.DLAnnotationParameter;
+import de.s42.dl.annotations.DLAnnotationType;
 import de.s42.dl.exceptions.DLException;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
@@ -42,43 +46,31 @@ public class EventAnnotation extends AbstractDLAnnotation
 
 	private final static Logger log = LogManager.getLogger(EventAnnotation.class.getName());
 
-	public final static String DEFAULT_SYMBOL = "event";
-
-	public EventAnnotation()
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(value = {ElementType.FIELD})
+	@DLAnnotationType(EventAnnotation.class)
+	public static @interface event
 	{
-		this(DEFAULT_SYMBOL);
+
+		public String eventName();
 	}
 
-	public EventAnnotation(String name)
-	{
-		super(name);
-	}
+	@DLAnnotationParameter(ordinal = 0, required = true)
+	protected String eventName;
 
 	@Override
-	public void bindToInstance(DLCore core, DLModule module, DLInstance instance, Object... parameters) throws DLException
+	public void bindToInstance(DLCore core, DLInstance instance) throws DLException
 	{
-		assert core != null;
-		assert instance != null;
-
-		Object[] params = validateParameters(parameters, new Class[]{String.class});
-		String eventName = (String) params[0];
-
-		// Ensure an Action is tagged
-		if (!instance.getType().isDerivedTypeOf(core.getType(EventAction.class).orElseThrow())) {
-			throw new InvalidAnnotation("the event annotation can only be used to tag Action types");
-		}
-
 		log.debug("EVENT", eventName, instance.getName());
 	}
 
-	public static String getEventName(DLMappedAnnotation mappedAnnotation) throws InvalidAnnotation
+	public String getEventName()
 	{
-		if (!mappedAnnotation.getAnnotation().getClass().equals(EventAnnotation.class)) {
-			throw new InvalidAnnotation("Mapped Annotation is not EventAnnotation");
-		}
+		return eventName;
+	}
 
-		Object[] params = validateParameters(mappedAnnotation.getParameters(), new Class[]{String.class});
-
-		return (String) params[0];
+	public void setEventName(String eventName)
+	{
+		this.eventName = eventName;
 	}
 }
