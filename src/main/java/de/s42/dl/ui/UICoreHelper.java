@@ -159,7 +159,7 @@ public final class UICoreHelper
 
 		DLModule module = core.parse(windowFile);
 
-		Window window = (Window) module.getChildAsJavaObject(core.getType(Window.class).orElseThrow(), core).orElseThrow();
+		Window window = (Window) module.getChildAsJavaObject(core.getType(Window.class).orElseThrow()).orElseThrow();
 
 		return window;
 	}

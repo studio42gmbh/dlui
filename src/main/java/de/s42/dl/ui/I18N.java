@@ -70,19 +70,19 @@ public class I18N extends DefaultDLInstance
 	}
 
 	@Override
-	public <ReturnType> ReturnType get(String key)
+	public Object get(String key)
 	{
-		ReturnType text = super.get(key);
+		Object text = super.get(key);
 
 		if (text != null) {
-			return (ReturnType)text;
+			return text;
 		}
 		
-		return (ReturnType)("<" + key + ">");
+		return "<" + key + ">";
 	}
 
 	@Override
-	public I18N toJavaObject(DLCore core)
+	public I18N toJavaObject()
 	{
 		return this;
 	}

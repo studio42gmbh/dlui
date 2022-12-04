@@ -59,13 +59,13 @@ public class ZoneAnnotation extends AbstractDLAnnotation
 	protected String zone;
 
 	@Override
-	public void bindToType(DLCore core, DLType type) throws DLException
+	public void bindToType(DLType type) throws DLException
 	{
 		log.debug("Zoned type", zone);
 	}
 
 	@Override
-	public void bindToInstance(DLCore core, DLInstance instance) throws DLException
+	public void bindToInstance(DLInstance instance) throws DLException
 	{
 		log.debug("Zoned instance", zone);
 	}

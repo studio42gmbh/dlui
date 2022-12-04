@@ -59,7 +59,7 @@ public class EventAnnotation extends AbstractDLAnnotation
 	protected String eventName;
 
 	@Override
-	public void bindToInstance(DLCore core, DLInstance instance) throws DLException
+	public void bindToInstance(DLInstance instance) throws DLException
 	{
 		log.debug("EVENT", eventName, instance.getName());
 	}
