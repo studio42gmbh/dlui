@@ -47,6 +47,8 @@ public interface Binding<ObjectType, DataType>
 
 	public void setValue(DataType value);
 
+	public void updatedValue();
+	
 	/**
 	 * The binding implementation shall add the given listener with a weak reference
 	 *

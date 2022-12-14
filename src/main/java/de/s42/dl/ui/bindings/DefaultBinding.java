@@ -132,6 +132,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	 * Is intended to be called by referenced data object to lny updtae but not set the property into it again.
 	 *
 	 * @param value
+	 * @return 
 	 */
 	public boolean updateValue(DataType value)
 	{
@@ -144,8 +145,18 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 			updateListeners(value);
 			return true;
 		}
-		
+
 		return false;
+	}
+
+	/**
+	 * Will update the binding listeners as it is expected that the value was changed (is good for complex values like
+	 * lists)
+	 */
+	@Override
+	public void updatedValue()
+	{
+		updateListeners(currentValue);
 	}
 
 	protected void updateListeners(DataType value)
@@ -209,12 +220,12 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 				Consumer<Optional<DataType>> lst = ref.get();
 
 				// Listener is mapped and equal -> remove
-				if (listener != null && listener.equals(lst)) {
+				if (lst != null && listener.equals(lst)) {
 					//log.debug("removeChangeListener:removedListener", listener);
 					iterator.remove();
 					removed = true;
 				} // Ref has been cleared -> remove from list
-				else if (listener == null) {
+				else if (lst == null) {
 					//log.debug("removeChangeListener:clearedListener");
 					iterator.remove();
 				}
