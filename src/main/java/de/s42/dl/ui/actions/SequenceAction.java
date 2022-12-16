@@ -26,7 +26,7 @@
 package de.s42.dl.ui.actions;
 
 import de.s42.dl.DLAttribute;
-import de.s42.dl.java.DLContainer;
+import de.s42.dl.types.DLContainer;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
 import java.util.ArrayList;

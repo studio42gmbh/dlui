@@ -26,7 +26,7 @@
 package de.s42.dl.ui.components;
 
 import de.s42.dl.DLAttribute.AttributeDL;
-import de.s42.dl.java.DLContainer;
+import de.s42.dl.types.DLContainer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
