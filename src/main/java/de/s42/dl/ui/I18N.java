@@ -26,7 +26,6 @@
 package de.s42.dl.ui;
 
 import de.s42.base.resources.ResourceHelper;
-import de.s42.dl.DLCore;
 import de.s42.dl.DLInstance;
 import de.s42.dl.DLType;
 import de.s42.dl.annotations.DontPersistDLAnnotation.dontPersist;
@@ -77,7 +76,7 @@ public class I18N extends DefaultDLInstance
 		if (text != null) {
 			return text;
 		}
-		
+
 		return "<" + key + ">";
 	}
 
