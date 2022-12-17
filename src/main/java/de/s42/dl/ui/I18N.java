@@ -74,18 +74,18 @@ public class I18N extends DefaultDLInstance
 	public Object get(String key)
 	{
 		Object text = super.get(key);
-		
+
 		if (text != null) {
-			
+
 			// This allows to use complex DL expressions to combine your localizations
 			try {
 				String dl = "String v : " + text + ";";
-				
+
 				DLModule mod = type.getCore().parse("I18N." + key + Math.random(), dl);
 				text = mod.get("v");
 
 				return text;
-				
+
 			} catch (DLException ex) {
 				throw new RuntimeException("Error loading i18n " + key + " - " + ex.getMessage(), ex);
 			}

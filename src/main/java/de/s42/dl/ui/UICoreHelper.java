@@ -28,6 +28,7 @@ package de.s42.dl.ui;
 import de.s42.dl.DLCore;
 import de.s42.dl.DLModule;
 import de.s42.dl.exceptions.DLException;
+import de.s42.dl.types.DefaultDLType;
 import de.s42.dl.ui.actions.AbstractAction;
 import de.s42.dl.ui.actions.Action;
 import de.s42.dl.ui.actions.DebugAction;
@@ -133,17 +134,18 @@ public final class UICoreHelper
 		core.defineType(core.createType(CloseWindowAction.class), "CloseWindowAction");
 		core.defineType(core.createType(CloseWindowEvent.class), "CloseWindowEvent");
 	}
-
-	/*	public static void loadL10N(DLCore core, String l10nPath) throws DLException, IOException
+	
+	public static I18N initI18N(DLCore core, String i18nSource) throws DLException, IOException
 	{
 		DefaultDLType i18nType = new DefaultDLType(I18N.class.getName());
 		i18nType.setAllowDynamicAttributes(true);
 		core.defineType(i18nType);
 		I18N i18n = new I18N(i18nType);
-		i18n.init(l10nPath);
+		i18n.init(i18nSource);
 		core.addExported(i18n);
+		return i18n;
 	}
-	 */
+
 	public static void loadPlugins(DLCore core, Path pluginPath) throws IOException
 	{
 		Files.find(pluginPath, 4, (file, attributes) -> {
