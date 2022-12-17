@@ -83,14 +83,15 @@ public class Window extends AbstractContainer<JFrame>
 			JComponent jComponent = (JComponent) component.createSwingComponent();
 			
 			GridBagConstraints c = new GridBagConstraints();
-			c.fill = GridBagConstraints.BOTH;
-			c.anchor = GridBagConstraints.CENTER;
+			c.fill = component.getFill().flags;
+			c.anchor = component.getAnchor().flags;
 			c.gridheight = 1;
 			c.gridwidth = 1;
 			c.gridx = component.getGridX();
 			c.gridy = component.getGridY();
 			c.weightx = component.getWeightX();
 			c.weighty = component.getWeightY();
+			c.insets = component.getInsets();
 			
 			frame.getContentPane().add(jComponent, c);
 		}

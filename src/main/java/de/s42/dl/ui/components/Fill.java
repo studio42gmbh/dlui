@@ -2,7 +2,7 @@
 /*
  * The MIT License
  * 
- * Copyright 2022 Studio 42 GmbH (https://www.s42m.de).
+ * Copyright 2022 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,52 +25,23 @@
 //</editor-fold>
 package de.s42.dl.ui.components;
 
-import java.awt.Insets;
-import java.awt.Rectangle;
+import java.awt.GridBagConstraints;
 
 /**
  *
  * @author Benjamin Schiller
- * @param <ComponentType>
  */
-public interface Component<ComponentType>
+public enum Fill
 {
-
-	public ComponentType createSwingComponent();
-
-	public Rectangle getBounds();
-
-	public void setBounds(Rectangle bounds);
-
-	public String getName();
-
-	public void setName(String name);
-
-	public int getGridX();
-
-	public void setGridX(int gridX);
-
-	public int getGridY();
-
-	public void setGridY(int gridY);
-
-	public float getWeightX();
-
-	public void setWeightX(float weightX);
-
-	public float getWeightY();
-
-	public void setWeightY(float weightY);
-
-	public Fill getFill();
-
-	public void setFill(Fill fill);
+	BOTH(GridBagConstraints.BOTH), 
+	HORIZONTAL(GridBagConstraints.HORIZONTAL), 
+	VERTICAL(GridBagConstraints.VERTICAL), 
+	NONE(GridBagConstraints.NONE);
 	
-	public Anchor getAnchor();
-
-	public void setAnchor(Anchor anchor);
+	public final int flags;
 	
-	public Insets getInsets();
-	
-	public void setInsets(Insets insets);
+	private Fill(int flags)
+	{
+		this.flags = flags;
+	}
 }

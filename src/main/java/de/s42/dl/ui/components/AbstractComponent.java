@@ -28,6 +28,7 @@ package de.s42.dl.ui.components;
 import de.s42.base.strings.StringHelper;
 import de.s42.dl.DLAttribute.AttributeDL;
 import de.s42.dl.ui.events.EventAction;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.util.Optional;
 import javax.swing.JComponent;
@@ -49,6 +50,15 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 
 	@AttributeDL(required = false)
 	protected EventAction onCreate;
+
+	@AttributeDL(required = false, defaultValue = "BOTH")
+	protected Fill fill = Fill.BOTH;
+
+	@AttributeDL(required = false, defaultValue = "CENTER")
+	protected Anchor anchor = Anchor.CENTER;
+
+	@AttributeDL(required = false, defaultValue = "0,0,0,0")
+	protected Insets insets = new Insets(0,0,0,0);
 
 	@AttributeDL(required = false, defaultValue = "0")
 	protected int gridX = 0;
@@ -187,5 +197,41 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	{
 		this.weightY = weightY;
 	}
-	//</editor-fold>	
+
+	@Override
+	public Fill getFill()
+	{
+		return fill;
+	}
+
+	@Override
+	public void setFill(Fill fill)
+	{
+		this.fill = fill;
+	}
+
+	@Override
+	public Anchor getAnchor()
+	{
+		return anchor;
+	}
+
+	@Override
+	public void setAnchor(Anchor anchor)
+	{
+		this.anchor = anchor;
+	}
+	
+	@Override
+	public Insets getInsets()
+	{
+		return insets;
+	}
+
+	@Override
+	public void setInsets(Insets insets)
+	{
+		this.insets = insets;
+	}	
+	//</editor-fold>
 }

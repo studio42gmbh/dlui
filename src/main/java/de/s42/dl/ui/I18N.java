@@ -27,8 +27,10 @@ package de.s42.dl.ui;
 
 import de.s42.base.resources.ResourceHelper;
 import de.s42.dl.DLInstance;
+import de.s42.dl.DLModule;
 import de.s42.dl.DLType;
 import de.s42.dl.annotations.DontPersistDLAnnotation.dontPersist;
+import de.s42.dl.exceptions.DLException;
 import de.s42.dl.instances.DefaultDLInstance;
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,9 +74,21 @@ public class I18N extends DefaultDLInstance
 	public Object get(String key)
 	{
 		Object text = super.get(key);
-
+		
 		if (text != null) {
-			return text;
+			
+			// This allows to use complex DL expressions to combine your localizations
+			try {
+				String dl = "String v : " + text + ";";
+				
+				DLModule mod = type.getCore().parse("I18N." + key + Math.random(), dl);
+				text = mod.get("v");
+
+				return text;
+				
+			} catch (DLException ex) {
+				throw new RuntimeException("Error loading i18n " + key + " - " + ex.getMessage(), ex);
+			}
 		}
 
 		return "<" + key + ">";

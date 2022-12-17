@@ -37,9 +37,11 @@ import de.s42.dl.ui.actions.SequenceAction;
 import de.s42.dl.ui.annotations.ZoneAnnotation;
 import de.s42.dl.ui.components.AbstractComponent;
 import de.s42.dl.ui.components.AbstractContainer;
+import de.s42.dl.ui.components.Anchor;
 import de.s42.dl.ui.components.button.Button;
 import de.s42.dl.ui.components.Component;
 import de.s42.dl.ui.components.CreateComponentEvent;
+import de.s42.dl.ui.components.Fill;
 import de.s42.dl.ui.components.Label;
 import de.s42.dl.ui.components.Panel;
 import de.s42.dl.ui.components.Text;
@@ -85,6 +87,10 @@ public final class UICoreHelper
 		core.defineAnnotationFactory(new ZoneAnnotation(), ZoneAnnotation.zone.class.getSimpleName());
 		core.defineAnnotationFactory(new EventAnnotation(), EventAnnotation.event.class.getSimpleName());
 
+		// Enums
+		core.defineType(core.createEnum(Anchor.class));
+		core.defineType(core.createEnum(Fill.class));
+				
 		// Core types
 		core.defineType(new ColorDLType(), "Color");
 		core.defineType(new RectangleDLType(), "Rectangle");
