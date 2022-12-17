@@ -240,7 +240,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	 *
 	 * @return
 	 */
-	public boolean clearListeners()
+	public boolean cleanupListeners()
 	{
 		boolean cleared = false;
 

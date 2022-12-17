@@ -26,9 +26,11 @@
 package de.s42.dl.ui.events;
 
 import de.s42.dl.DLAttribute.AttributeDL;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,18 +42,7 @@ public class EventManager
 {
 
 	@AttributeDL(ignore = true)
-	protected final Map<String, List<EventAction>> actionsByEvent = new HashMap<>();
-
-	protected List<EventAction> getReceivers(Event event)
-	{
-		List<EventAction> result = actionsByEvent.get(event.getName());
-
-		if (result != null) {
-			return result;
-		}
-
-		return Collections.EMPTY_LIST;
-	}
+	protected final Map<String, List<WeakReference<EventAction>>> actionsByEvent = new HashMap<>();
 
 	public void send(String eventName) throws Exception
 	{
@@ -60,20 +51,75 @@ public class EventManager
 
 	public void send(Event event) throws Exception
 	{
-		for (EventAction action : getReceivers(event)) {
-			action.perform(event);
+		boolean cleanup = false;
+
+		for (WeakReference<EventAction> actionRef : getReceivers(event)) {
+
+			EventAction action = actionRef.get();
+
+			if (action != null) {
+				action.perform(event);
+			} else {
+				cleanup = true;
+			}
+		}
+
+		if (cleanup) {
+			cleanupReceivers(getReceivers(event));
 		}
 	}
 
-	public synchronized void register(String eventName, EventAction action)
+	public synchronized void registerWeak(String eventName, EventAction action)
 	{
-		List<EventAction> actions = actionsByEvent.get(eventName);
+		List<WeakReference<EventAction>> actions = actionsByEvent.get(eventName);
 
 		if (actions == null) {
 			actions = new ArrayList<>();
 			actionsByEvent.put(eventName, actions);
 		}
 
-		actions.add(action);
+		actions.add(new WeakReference(action));
+	}
+	
+	protected List<WeakReference<EventAction>> getReceivers(Event event)
+	{
+		List<WeakReference<EventAction>> result = actionsByEvent.get(event.getName());
+
+		if (result != null) {
+			return result;
+		}
+
+		return Collections.EMPTY_LIST;
+	}
+	
+	/**
+	 * Iterates all listeners and removed those that are cleared
+	 *
+	 * @return
+	 */
+	protected boolean cleanupReceivers(List<WeakReference<EventAction>> receivers)
+	{
+		boolean cleared = false;
+
+		synchronized (receivers) {
+
+			Iterator<WeakReference<EventAction>> iterator = receivers.iterator();
+
+			while (iterator.hasNext()) {
+
+				WeakReference<EventAction> ref = iterator.next();
+
+				EventAction action = ref.get();
+
+				// Listener is cleared -> remove
+				if (action == null) {
+					//log.debug("clearListeners:clearedListener");
+					iterator.remove();
+					cleared = true;
+				}
+			}
+		}
+
+		return cleared;
 	}
 }
