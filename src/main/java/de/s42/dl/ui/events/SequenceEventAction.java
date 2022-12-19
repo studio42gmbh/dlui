@@ -26,7 +26,7 @@
 package de.s42.dl.ui.events;
 
 import de.s42.dl.ui.actions.*;
-import de.s42.dl.DLAttribute;
+import de.s42.dl.DLAttribute.AttributeDL;
 import de.s42.dl.types.DLContainer;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
@@ -43,7 +43,7 @@ public class SequenceEventAction<EventType extends Event> implements EventAction
 
 	private final static Logger log = LogManager.getLogger(SequenceEventAction.class.getName());
 
-	@DLAttribute.AttributeDL(ignore = true)
+	@AttributeDL(ignore = true)
 	protected List<Action> actions = new ArrayList<>();
 
 	@Override
