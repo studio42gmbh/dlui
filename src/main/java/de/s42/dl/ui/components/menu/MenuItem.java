@@ -23,27 +23,70 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-package de.s42.dl.ui.components;
+package de.s42.dl.ui.components.menu;
 
 import de.s42.dl.DLAttribute.AttributeDL;
-import de.s42.dl.ui.Font;
+import de.s42.dl.ui.components.AbstractComponent;
+import de.s42.dl.ui.events.EventAction;
+import javax.swing.JMenuItem;
 
 /**
  *
  * @author Benjamin Schiller
- * @param <ComponentType>
  */
-public abstract class TextComponent<ComponentType> extends AbstractComponent<ComponentType>
+public class MenuItem extends AbstractComponent<JMenuItem>
 {
 
-	@AttributeDL(required = true)
-	//@AnnotationDL(value = LengthDLAnnotation.DEFAULT_SYMBOL, parameters = {"0", "10000"})
-	protected String text;
+	@AttributeDL(required = false)
+	protected EventAction onClick;
 
-	@AttributeDL
-	protected Font font;
+	@AttributeDL(required = true)
+	protected String text;
+	
+	@AttributeDL(required = false)
+	protected char mnemonic;
+	
+	@Override
+	public JMenuItem createSwingComponent()
+	{
+		JMenuItem component = new JMenuItem(getText());
+		
+		if (mnemonic > 0) {
+			component.setMnemonic(getMnemonic());
+		}
+		
+		initComponent(component);
+
+		// Handle on select
+		component.addActionListener((evt) -> {
+			onClick(component);
+		});
+
+		return component;
+	}
+
+	public void onClick(JMenuItem component)
+	{
+		if (onClick != null) {
+			try {
+				onClick.perform(new MenuItemClickedEvent(this, component));
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+	}
 
 	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
+	public EventAction getOnClick()
+	{
+		return onClick;
+	}
+
+	public void setOnClick(EventAction onClick)
+	{
+		this.onClick = onClick;
+	}
+	
 	public String getText()
 	{
 		return text;
@@ -52,16 +95,16 @@ public abstract class TextComponent<ComponentType> extends AbstractComponent<Com
 	public void setText(String text)
 	{
 		this.text = text;
+	}	
+	
+	public char getMnemonic()
+	{
+		return mnemonic;
 	}
 
-	public Font getFont()
+	public void setMnemonic(char mnemonic)
 	{
-		return font;
-	}
-
-	public void setFont(Font font)
-	{
-		this.font = font;
-	}
+		this.mnemonic = mnemonic;
+	}	
 	//</editor-fold>
 }

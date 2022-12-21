@@ -47,7 +47,12 @@ import de.s42.dl.ui.components.Label;
 import de.s42.dl.ui.components.Panel;
 import de.s42.dl.ui.components.Text;
 import de.s42.dl.ui.components.TextComponent;
+import de.s42.dl.ui.components.button.ButtonClickedEvent;
 import de.s42.dl.ui.components.dropdown.Dropdown;
+import de.s42.dl.ui.components.menu.Menu;
+import de.s42.dl.ui.components.menu.MenuClickedEvent;
+import de.s42.dl.ui.components.menu.MenuItem;
+import de.s42.dl.ui.components.menu.MenuItemClickedEvent;
 import de.s42.dl.ui.components.window.CloseWindowAction;
 import de.s42.dl.ui.components.window.CloseWindowEvent;
 import de.s42.dl.ui.components.window.Window;
@@ -127,8 +132,14 @@ public final class UICoreHelper
 		core.defineType(core.createType(Panel.Layout.class), "PanelLayout");
 		core.defineType(core.createType(Panel.class), "Panel");
 		core.defineType(core.createType(Dropdown.class), "Dropdown");
+		core.defineType(core.createType(Menu.class), "Menu");
+		core.defineType(core.createType(MenuItem.class), "MenuItem");		
 		core.defineType(core.createType(CreateComponentEvent.class), "CreateComponentEvent");
 
+		core.defineType(core.createType(ButtonClickedEvent.class), "ButtonClickedEvent");
+		core.defineType(core.createType(MenuClickedEvent.class), "MenuClickedEvent");
+		core.defineType(core.createType(MenuItemClickedEvent.class), "MenuItemClickedEvent");
+		
 		// Allow to access window
 		core.defineType(core.createType(Window.class), "Window");
 		core.defineType(core.createType(CloseWindowAction.class), "CloseWindowAction");

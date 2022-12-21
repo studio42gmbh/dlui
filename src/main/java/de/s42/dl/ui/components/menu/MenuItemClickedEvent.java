@@ -23,22 +23,22 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-package de.s42.dl.ui.components.window;
+package de.s42.dl.ui.components.menu;
 
 import de.s42.dl.ui.components.ComponentEvent;
-import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 
 /**
  *
  * @author Benjamin Schiller
  */
-public class CloseWindowEvent extends ComponentEvent<Window, JFrame>
+public class MenuItemClickedEvent extends ComponentEvent<MenuItem, JMenuItem>
 {
 
-	public final static String EVENT_NAME = "CloseWindowInstance";
+	public final static String EVENT_NAME = "MenuItemClicked";
 
-	public CloseWindowEvent(Window window, JFrame frame)
+	public MenuItemClickedEvent(MenuItem menuItem, JMenuItem component)
 	{
-		super(EVENT_NAME, window, frame);
+		super(EVENT_NAME, menuItem, component);
 	}
 }

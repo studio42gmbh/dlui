@@ -43,9 +43,9 @@ public class CloseWindowAction implements EventAction<CloseWindowEvent>
 	{
 		assert event != null;
 		
-		log.debug("perform", event.getWindow().getName());		
+		log.debug("perform", event.getComponent().getName());		
 		
-		event.getFrame().setVisible(false);
-		event.getFrame().dispose();
+		event.getjComponent().setVisible(false);
+		event.getjComponent().dispose();
 	}	
 }

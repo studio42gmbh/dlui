@@ -25,10 +25,12 @@
 //</editor-fold>
 package de.s42.dl.ui.components.window;
 
+import de.s42.base.resources.ResourceHelper;
 import de.s42.dl.DLAttribute.AttributeDL;
 import static de.s42.dl.ui.components.AbstractComponent.COMPONENT_CLIENT_PROPERTY_KEY;
 import de.s42.dl.ui.components.AbstractContainer;
 import de.s42.dl.ui.components.Component;
+import de.s42.dl.ui.components.menu.Menu;
 import de.s42.dl.ui.events.EventAction;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,23 +39,28 @@ import java.awt.event.WindowEvent;
 import java.util.Optional;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 
 /**
  *
  * @author Benjamin Schiller
  */
-public class Window extends AbstractContainer<JFrame>
+public class Window extends AbstractContainer<JFrame, Component>
 {
 
 	@AttributeDL(required = false)
 	protected String title;
 
 	@AttributeDL(required = false)
+	protected String iconSource;
+
+	@AttributeDL(required = false)
 	protected EventAction onClose;
-	
+
 	@AttributeDL(required = false, defaultValue = "false")
 	protected boolean maximized = false;
-	
+
 	public static Optional<Window> getWindow(JFrame jFrame)
 	{
 		Object comp = jFrame.getRootPane().getClientProperty(COMPONENT_CLIENT_PROPERTY_KEY);
@@ -64,12 +71,12 @@ public class Window extends AbstractContainer<JFrame>
 
 		return Optional.empty();
 	}
-	
+
 	@Override
 	public JFrame createSwingComponent()
 	{
 		JFrame frame = new JFrame();
-		
+
 		frame.getRootPane().putClientProperty(COMPONENT_CLIENT_PROPERTY_KEY, this);
 
 		// Do nothing by default on close window
@@ -78,22 +85,36 @@ public class Window extends AbstractContainer<JFrame>
 		frame.getContentPane().setLayout(new GridBagLayout());
 
 		// Iterate components and add them to content pane
-		for (Component component : components) {
+		for (Component component : getComponents()) {
 
-			JComponent jComponent = (JComponent) component.createSwingComponent();
-			
-			GridBagConstraints c = new GridBagConstraints();
-			c.fill = component.getFill().flags;
-			c.anchor = component.getAnchor().flags;
-			c.gridheight = 1;
-			c.gridwidth = 1;
-			c.gridx = component.getGridX();
-			c.gridy = component.getGridY();
-			c.weightx = component.getWeightX();
-			c.weighty = component.getWeightY();
-			c.insets = component.getInsets();
-			
-			frame.getContentPane().add(jComponent, c);
+			if (component instanceof Menu) {
+				
+				JMenu menu = ((Menu)component).createSwingComponent();
+				
+				// Create inital menu bar
+				if (frame.getJMenuBar() == null) {
+					frame.setJMenuBar(new JMenuBar());
+				}
+				
+				frame.getJMenuBar().add(menu);
+
+			} else if (component != null) {
+
+				JComponent jComponent = (JComponent) component.createSwingComponent();
+
+				GridBagConstraints c = new GridBagConstraints();
+				c.fill = component.getFill().flags;
+				c.anchor = component.getAnchor().flags;
+				c.gridwidth = component.getGridWidth();
+				c.gridheight = component.getGridHeight();
+				c.gridx = component.getGridX();
+				c.gridy = component.getGridY();
+				c.weightx = component.getWeightX();
+				c.weighty = component.getWeightY();
+				c.insets = component.getInsets();
+
+				frame.getContentPane().add(jComponent, c);
+			}
 		}
 
 		// Add window listeners
@@ -108,15 +129,20 @@ public class Window extends AbstractContainer<JFrame>
 
 		// Send on create instance event
 		onCreate(frame);
-		
+
 		// Set size and fill content pane with view
 		if (getBounds() != null) {
 			frame.setSize(getBounds().getSize());
 			frame.setLocation(getBounds().getLocation());
 		}
-				
+
 		frame.setTitle(getTitle());
-		
+
+		// Set icon
+		if (iconSource != null) {
+			frame.setIconImage(ResourceHelper.getResourceAsImage(iconSource));
+		}
+
 		if (isMaximized()) {
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
@@ -176,7 +202,7 @@ public class Window extends AbstractContainer<JFrame>
 	{
 		this.onCreate = onCreate;
 	}
-	
+
 	public boolean isMaximized()
 	{
 		return maximized;
@@ -185,6 +211,16 @@ public class Window extends AbstractContainer<JFrame>
 	public void setMaximized(boolean maximized)
 	{
 		this.maximized = maximized;
+	}
+
+	public String getIconSource()
+	{
+		return iconSource;
+	}
+
+	public void setIconSource(String iconSource)
+	{
+		this.iconSource = iconSource;
 	}
 	//</editor-fold>
 }

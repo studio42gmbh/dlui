@@ -23,22 +23,49 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-package de.s42.dl.ui.components.window;
+package de.s42.dl.ui.components;
 
-import de.s42.dl.ui.components.ComponentEvent;
-import javax.swing.JFrame;
+import de.s42.dl.ui.events.*;
 
 /**
  *
  * @author Benjamin Schiller
+ * @param <ComponentType>
+ * @param <JComponentType>
  */
-public class CloseWindowEvent extends ComponentEvent<Window, JFrame>
+public class ComponentEvent<ComponentType, JComponentType> extends DefaultEvent
 {
 
-	public final static String EVENT_NAME = "CloseWindowInstance";
+	protected ComponentType component;
 
-	public CloseWindowEvent(Window window, JFrame frame)
+	protected JComponentType jComponent;
+
+	public ComponentEvent(String eventName, ComponentType component, JComponentType jComponent)
 	{
-		super(EVENT_NAME, window, frame);
+		super(eventName);
+		this.jComponent = jComponent;
+		this.component = component;
 	}
+
+	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
+	public ComponentType getComponent()
+	{
+		return component;
+	}
+
+	public void setComponent(ComponentType component)
+	{
+		this.component = component;
+	}
+
+	public JComponentType getjComponent()
+	{
+		return jComponent;
+	}
+
+	public void setjComponent(JComponentType jComponent)
+	{
+		this.jComponent = jComponent;
+	}
+	//</editor-fold>
 }

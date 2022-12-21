@@ -58,13 +58,19 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	protected Anchor anchor = Anchor.CENTER;
 
 	@AttributeDL(required = false, defaultValue = "0,0,0,0")
-	protected Insets insets = new Insets(0,0,0,0);
+	protected Insets insets = new Insets(0, 0, 0, 0);
 
 	@AttributeDL(required = false, defaultValue = "0")
 	protected int gridX = 0;
 
 	@AttributeDL(required = false, defaultValue = "0")
 	protected int gridY = 0;
+
+	@AttributeDL(required = false, defaultValue = "1")
+	protected int gridWidth = 1;
+
+	@AttributeDL(required = false, defaultValue = "1")
+	protected int gridHeight = 1;
 
 	@AttributeDL(required = false, defaultValue = "0.0")
 	protected float weightX = 0.0f;
@@ -221,7 +227,7 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	{
 		this.anchor = anchor;
 	}
-	
+
 	@Override
 	public Insets getInsets()
 	{
@@ -232,6 +238,30 @@ public abstract class AbstractComponent<ComponentType> implements Component<Comp
 	public void setInsets(Insets insets)
 	{
 		this.insets = insets;
+	}
+	
+	@Override
+	public int getGridWidth()
+	{
+		return gridWidth;
+	}
+
+	@Override
+	public void setGridWidth(int gridWidth)
+	{
+		this.gridWidth = gridWidth;
+	}
+
+	@Override
+	public int getGridHeight()
+	{
+		return gridHeight;
+	}
+
+	@Override
+	public void setGridHeight(int gridHeight)
+	{
+		this.gridHeight = gridHeight;
 	}	
 	//</editor-fold>
 }

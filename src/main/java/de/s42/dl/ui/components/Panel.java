@@ -38,7 +38,7 @@ import javax.swing.border.EmptyBorder;
  *
  * @author Benjamin Schiller
  */
-public class Panel extends AbstractContainer<JPanel>
+public class Panel extends AbstractContainer<JPanel, Component>
 {
 
 	public enum Layout

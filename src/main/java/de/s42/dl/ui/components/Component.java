@@ -54,6 +54,14 @@ public interface Component<ComponentType>
 
 	public void setGridY(int gridY);
 
+	public int getGridWidth();
+
+	public void setGridWidth(int gridWidth);
+
+	public int getGridHeight();
+
+	public void setGridHeight(int gridHeight);
+	
 	public float getWeightX();
 
 	public void setWeightX(float weightX);

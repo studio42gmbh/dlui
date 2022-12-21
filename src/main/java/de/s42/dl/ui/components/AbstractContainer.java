@@ -35,15 +35,16 @@ import java.util.List;
  *
  * @author Benjamin Schiller
  * @param <ComponentType>
+ * @param <ContainedComponentType>
  */
-public abstract class AbstractContainer<ComponentType> extends AbstractComponent<ComponentType> implements DLContainer<Component>
+public abstract class AbstractContainer<ComponentType, ContainedComponentType> extends AbstractComponent<ComponentType> implements DLContainer<ContainedComponentType>
 {
 
 	@AttributeDL(ignore = true)
-	protected final List<Component> components = new ArrayList<>();
+	protected final List<ContainedComponentType> components = new ArrayList<>();
 
 	@Override
-	public void addChild(String name, Component child)
+	public void addChild(String name, ContainedComponentType child)
 	{
 		assert child != null;
 
@@ -51,12 +52,12 @@ public abstract class AbstractContainer<ComponentType> extends AbstractComponent
 	}
 
 	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
-	public List<Component> getComponents()
+	public List<ContainedComponentType> getComponents()
 	{
 		return Collections.unmodifiableList(components);
 	}
 
-	public void setComponents(List<Component> components)
+	public void setComponents(List<ContainedComponentType> components)
 	{
 		assert components != null;
 
@@ -64,7 +65,7 @@ public abstract class AbstractContainer<ComponentType> extends AbstractComponent
 		this.components.addAll(components);
 	}
 
-	public void addComponent(Component component)
+	public void addComponent(ContainedComponentType component)
 	{
 		assert component != null;
 
