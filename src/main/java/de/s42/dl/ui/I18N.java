@@ -29,7 +29,7 @@ import de.s42.base.resources.ResourceHelper;
 import de.s42.dl.DLInstance;
 import de.s42.dl.DLModule;
 import de.s42.dl.DLType;
-import de.s42.dl.annotations.DontPersistDLAnnotation.dontPersist;
+import de.s42.dl.annotations.persistence.DontPersistDLAnnotation.dontPersist;
 import de.s42.dl.exceptions.DLException;
 import de.s42.dl.instances.DefaultDLInstance;
 import java.io.IOException;
