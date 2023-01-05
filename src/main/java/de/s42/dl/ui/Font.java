@@ -25,9 +25,8 @@
 //</editor-fold>
 package de.s42.dl.ui;
 
-import de.s42.dl.DLAnnotation.AnnotationDL;
 import de.s42.dl.DLAttribute.AttributeDL;
-import de.s42.dl.annotations.RangeDLAnnotation;
+import de.s42.dl.annotations.numbers.RangeDLAnnotation.range;
 
 /**
  *
@@ -40,7 +39,7 @@ public class Font
 	protected String face;
 
 	@AttributeDL(required = true)
-	//@AnnotationDL(value = RangeDLAnnotation.DEFAULT_SYMBOL, parameters = {"1", "10000"})
+	@range(min = 1, max = 10000)
 	protected int size;
 
 	@AttributeDL(required = false, defaultValue = "false")
@@ -51,23 +50,22 @@ public class Font
 
 	@AttributeDL(required = false, defaultValue = "false")
 	protected boolean capitals = false;
-	
+
 	@AttributeDL(ignore = true)
 	protected java.awt.Font awtFont;
-	
-	
+
 	public synchronized java.awt.Font getAwtFont()
 	{
 		if (awtFont != null) {
 			return awtFont;
 		}
-		
+
 		int style
 			= (isBold() ? java.awt.Font.BOLD : 0)
 			| (isItalic() ? java.awt.Font.ITALIC : 0);
 
 		awtFont = new java.awt.Font(getFace(), style, getSize());
-		
+
 		return awtFont;
 	}
 
@@ -111,7 +109,7 @@ public class Font
 	{
 		this.italic = italic;
 	}
-	
+
 	public boolean isCapitals()
 	{
 		return capitals;
