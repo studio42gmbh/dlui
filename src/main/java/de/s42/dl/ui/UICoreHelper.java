@@ -149,7 +149,7 @@ public final class UICoreHelper
 	public static I18N initI18N(DLCore core, String i18nSource) throws DLException, IOException
 	{
 		DefaultDLType i18nType = new DefaultDLType(I18N.class.getName());
-		i18nType.setAllowDynamicAttributes(true);
+		i18nType.setDynamic(true);
 		core.defineType(i18nType);
 		I18N i18n = new I18N(i18nType);
 		i18n.init(i18nSource);
