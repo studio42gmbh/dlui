@@ -61,6 +61,11 @@ public class EventAnnotation extends AbstractDLAnnotation
 	@Override
 	public void bindToInstance(DLInstance instance) throws DLException
 	{
+		assert instance != null;
+		
+		container = instance;
+		container.addAnnotation(this);
+		
 		log.debug("EVENT", eventName, instance.getName());
 	}
 

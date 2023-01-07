@@ -61,12 +61,23 @@ public class ZoneAnnotation extends AbstractDLAnnotation
 	@Override
 	public void bindToType(DLType type) throws DLException
 	{
+		assert type != null;
+		
+		container = type;
+		container.addAnnotation(this);
+		
 		log.debug("Zoned type", zone);
+		
 	}
 
 	@Override
 	public void bindToInstance(DLInstance instance) throws DLException
 	{
+		assert instance != null;
+		
+		container = instance;
+		container.addAnnotation(this);
+		
 		log.debug("Zoned instance", zone);
 	}
 
