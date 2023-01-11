@@ -1,8 +1,9 @@
+
 // <editor-fold desc="The MIT License" defaultstate="collapsed">
-/* 
+/*
  * The MIT License
  * 
- * Copyright 2021 Studio 42 GmbH ( https://www.s42m.de ).
+ * Copyright 2023 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +24,21 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
+package de.s42.dl.ui.visual;
 
-module de.sft.dlui
+import de.s42.dl.DLModule;
+import javax.swing.JPanel;
+import javax.swing.text.Document;
+
+/**
+ *
+ * @author Benjamin Schiller
+ */
+public interface VisualDLEditor
 {
-	requires java.desktop;
-	requires de.sft.dl;
-	requires de.sft.log;
-	requires de.sft.base;
+	public String getDisplay();
 	
-	exports de.s42.dl.ui;
-	exports de.s42.dl.ui.actions;
-	exports de.s42.dl.ui.annotations;
-	exports de.s42.dl.ui.bindings;
-	exports de.s42.dl.ui.components;
-	exports de.s42.dl.ui.components.button;
-	exports de.s42.dl.ui.components.dropdown;
-	exports de.s42.dl.ui.components.menu;
-	exports de.s42.dl.ui.components.window;
-	exports de.s42.dl.ui.events;
-	exports de.s42.dl.ui.pragmas;
-	exports de.s42.dl.ui.visual;
+	public boolean canEdit(DLModule module);
+	
+	public JPanel createEditor(DLModule module, Document document);
 }
