@@ -31,13 +31,8 @@ import de.s42.base.beans.BeanProperty;
 import de.s42.base.beans.InvalidBean;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * Default implementation of a Binding using the Bean pattern to access the object data. ATTENTION : This binding adds
@@ -48,7 +43,7 @@ import java.util.function.Consumer;
  * @param <ObjectType> The object to which is bound
  * @param <DataType> The data type of the bound data
  */
-public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType, DataType>
+public class DefaultBinding<ObjectType, DataType> extends AbstractBinding<ObjectType, DataType>
 {
 
 	private final static Logger log = LogManager.getLogger(DefaultBinding.class.getName());
@@ -58,8 +53,6 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 
 	protected final BeanInfo<ObjectType> info;
 	protected final BeanProperty<ObjectType, DataType> property;
-
-	protected final List<WeakReference<Consumer<Optional<DataType>>>> listeners = new ArrayList<>();
 
 	protected DataType currentValue;
 
@@ -132,7 +125,7 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	 * Is intended to be called by referenced data object to lny updtae but not set the property into it again.
 	 *
 	 * @param value
-	 * @return 
+	 * @return
 	 */
 	public boolean updateValue(DataType value)
 	{
@@ -157,112 +150,5 @@ public class DefaultBinding<ObjectType, DataType> implements Binding<ObjectType,
 	public void updatedValue()
 	{
 		updateListeners(currentValue);
-	}
-
-	protected void updateListeners(DataType value)
-	{
-		Optional<DataType> opt = Optional.ofNullable(value);
-
-		synchronized (listeners) {
-
-			Iterator<WeakReference<Consumer<Optional<DataType>>>> iterator = listeners.iterator();
-
-			while (iterator.hasNext()) {
-
-				WeakReference<Consumer<Optional<DataType>>> ref = iterator.next();
-
-				Consumer<Optional<DataType>> listener = ref.get();
-
-				// Listener is mapped -> send update
-				if (listener != null) {
-					listener.accept(opt);
-				} // Ref has been cleared -> remove from list
-				else {
-					//log.debug("updateListeners:clearedListener");
-					iterator.remove();
-				}
-			}
-		}
-	}
-
-	@Override
-	public boolean addWeakChangeListener(Consumer<Optional<DataType>> listener)
-	{
-		assert listener != null;
-
-		synchronized (listeners) {
-
-			if (listeners.stream().noneMatch((ref) -> {
-				return Objects.equals(ref.get(), listener);
-			})) {
-				return listeners.add(new WeakReference(listener));
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean removeWeakChangeListener(Consumer<Optional<DataType>> listener)
-	{
-		assert listener != null;
-
-		boolean removed = false;
-
-		synchronized (listeners) {
-
-			Iterator<WeakReference<Consumer<Optional<DataType>>>> iterator = listeners.iterator();
-
-			while (iterator.hasNext()) {
-
-				WeakReference<Consumer<Optional<DataType>>> ref = iterator.next();
-
-				Consumer<Optional<DataType>> lst = ref.get();
-
-				// Listener is mapped and equal -> remove
-				if (lst != null && listener.equals(lst)) {
-					//log.debug("removeChangeListener:removedListener", listener);
-					iterator.remove();
-					removed = true;
-				} // Ref has been cleared -> remove from list
-				else if (lst == null) {
-					//log.debug("removeChangeListener:clearedListener");
-					iterator.remove();
-				}
-			}
-		}
-
-		return removed;
-	}
-
-	/**
-	 * Iterates all listeners and removed those that are cleared
-	 *
-	 * @return
-	 */
-	public boolean cleanupListeners()
-	{
-		boolean cleared = false;
-
-		synchronized (listeners) {
-
-			Iterator<WeakReference<Consumer<Optional<DataType>>>> iterator = listeners.iterator();
-
-			while (iterator.hasNext()) {
-
-				WeakReference<Consumer<Optional<DataType>>> ref = iterator.next();
-
-				Consumer<Optional<DataType>> listener = ref.get();
-
-				// Listener is cleared -> remove
-				if (listener == null) {
-					//log.debug("clearListeners:clearedListener");
-					iterator.remove();
-					cleared = true;
-				}
-			}
-		}
-
-		return cleared;
 	}
 }

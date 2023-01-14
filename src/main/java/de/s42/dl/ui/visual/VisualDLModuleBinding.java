@@ -25,18 +25,17 @@
 //</editor-fold>
 package de.s42.dl.ui.visual;
 
-import javax.swing.JPanel;
+import de.s42.dl.DLCore;
+import de.s42.dl.DLModule;
+import de.s42.dl.ui.bindings.Binding;
+import java.util.Optional;
 
 /**
  *
  * @author Benjamin Schiller
+ * @param <ObjectType>
  */
-public interface VisualDLEditor
+public interface VisualDLModuleBinding<ObjectType> extends Binding<ObjectType, DLModule>
 {
-
-	public String getDisplay();
-
-	public boolean canEdit(VisualDLModuleBinding<?> binding);
-
-	public JPanel createEditor(VisualDLModuleBinding<?> binding);
+	public Optional<DLCore> getCore();
 }
