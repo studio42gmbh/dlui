@@ -2,7 +2,7 @@
 /*
  * The MIT License
  * 
- * Copyright 2022 Studio 42 GmbH (https://www.s42m.de).
+ * Copyright 2023 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,62 +23,44 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
+
 package de.s42.dl.ui.components;
 
-import java.awt.Insets;
-import java.awt.Rectangle;
+import de.s42.log.LogManager;
+import de.s42.log.Logger;
+import java.awt.GridBagConstraints;
 
 /**
  *
  * @author Benjamin Schiller
- * @param <ComponentType>
  */
-public interface Component<ComponentType>
+public final class ComponentHelper 
 {
 
-	public ComponentType createSwingComponent();
-
-	public Rectangle getBounds();
-
-	public void setBounds(Rectangle bounds);
-
-	public String getName();
-
-	public void setName(String name);
-
-	public int getGridX();
-
-	public void setGridX(int gridX);
-
-	public int getGridY();
-
-	public void setGridY(int gridY);
-
-	public int getGridWidth();
-
-	public void setGridWidth(int gridWidth);
-
-	public int getGridHeight();
-
-	public void setGridHeight(int gridHeight);
+	private final static Logger log = LogManager.getLogger(ComponentHelper.class.getName());
 	
-	public float getWeightX();
-
-	public void setWeightX(float weightX);
-
-	public float getWeightY();
-
-	public void setWeightY(float weightY);
-
-	public Fill getFill();
-
-	public void setFill(Fill fill);
+	private ComponentHelper()
+	{
+		// Never instantiated
+	}
 	
-	public Anchor getAnchor();
+	public static GridBagConstraints createConstraints(Component component)
+	{
+		assert component != null;
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = component.getFill().flags;
+		c.anchor = component.getAnchor().flags;
+		c.gridwidth = component.getGridWidth();
+		c.gridheight = component.getGridHeight();
+		c.gridx = component.getGridX();
+		c.gridy = component.getGridY();
+		c.weightx = component.getWeightX();
+		c.weighty = component.getWeightY();
+		c.insets = component.getInsets();
+		
+		return c;
+	}
+	
 
-	public void setAnchor(Anchor anchor);
-	
-	public Insets getInsets();
-	
-	public void setInsets(Insets insets);	
 }

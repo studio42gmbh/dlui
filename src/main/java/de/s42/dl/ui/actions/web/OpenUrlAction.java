@@ -2,7 +2,7 @@
 /*
  * The MIT License
  * 
- * Copyright 2022 Studio 42 GmbH (https://www.s42m.de).
+ * Copyright 2023 Studio 42 GmbH ( https://www.s42m.de ).
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,62 +23,37 @@
  * THE SOFTWARE.
  */
 //</editor-fold>
-package de.s42.dl.ui.components;
+package de.s42.dl.ui.actions.web;
 
-import java.awt.Insets;
-import java.awt.Rectangle;
+import de.s42.dl.ui.events.Event;
+import de.s42.dl.ui.events.EventAction;
+import java.awt.Desktop;
+import java.net.URL;
 
 /**
  *
  * @author Benjamin Schiller
- * @param <ComponentType>
  */
-public interface Component<ComponentType>
+public class OpenUrlAction implements EventAction
 {
 
-	public ComponentType createSwingComponent();
+	protected URL url;
 
-	public Rectangle getBounds();
+	@Override
+	public void perform(Event event) throws Exception
+	{
+		Desktop.getDesktop().browse(url.toURI());
+	}
 
-	public void setBounds(Rectangle bounds);
+	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
+	public URL getUrl()
+	{
+		return url;
+	}
 
-	public String getName();
-
-	public void setName(String name);
-
-	public int getGridX();
-
-	public void setGridX(int gridX);
-
-	public int getGridY();
-
-	public void setGridY(int gridY);
-
-	public int getGridWidth();
-
-	public void setGridWidth(int gridWidth);
-
-	public int getGridHeight();
-
-	public void setGridHeight(int gridHeight);
-	
-	public float getWeightX();
-
-	public void setWeightX(float weightX);
-
-	public float getWeightY();
-
-	public void setWeightY(float weightY);
-
-	public Fill getFill();
-
-	public void setFill(Fill fill);
-	
-	public Anchor getAnchor();
-
-	public void setAnchor(Anchor anchor);
-	
-	public Insets getInsets();
-	
-	public void setInsets(Insets insets);	
+	public void setUrl(URL url)
+	{
+		this.url = url;
+	}
+	//</editor-fold>	
 }

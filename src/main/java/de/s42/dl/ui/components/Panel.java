@@ -27,6 +27,8 @@ package de.s42.dl.ui.components;
 
 import de.s42.dl.DLAttribute.AttributeDL;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -45,14 +47,12 @@ public class Panel extends AbstractContainer<JPanel, Component>
 	{
 		NONE,
 		VERTICALFLOW,
-		HORIZONTALFLOW
+		HORIZONTALFLOW,
+		GRIDBAG
 	}
 
 	@AttributeDL(required = false, defaultValue = "NONE")
 	protected Layout layout = Layout.NONE;
-
-	@AttributeDL(required = false, defaultValue = "0,0,0,0")
-	protected Insets insets = new Insets(0, 0, 0, 0);
 
 	@Override
 	public JPanel createSwingComponent()
@@ -67,6 +67,8 @@ public class Panel extends AbstractContainer<JPanel, Component>
 			component.setLayout(new BoxLayout(component, BoxLayout.PAGE_AXIS));
 		} else if (layout == Layout.HORIZONTALFLOW) {
 			component.setLayout(new BoxLayout(component, BoxLayout.LINE_AXIS));
+		} else if (layout == Layout.GRIDBAG) {
+			component.setLayout(new GridBagLayout());
 		}
 
 		// Iterate components and add them to content pane
@@ -76,12 +78,21 @@ public class Panel extends AbstractContainer<JPanel, Component>
 			JComponent jComponent = (JComponent) child.createSwingComponent();
 			jComponent.setAlignmentX(JComponent.LEFT_ALIGNMENT);
 
+			// Add spacers in Box layouts
 			if (!first
 				&& (layout == Layout.VERTICALFLOW || layout == Layout.HORIZONTALFLOW)) {
 				component.add(Box.createRigidArea(new Dimension(5, 5)));
 			}
+			
+			// Handle Gridbaglayout
+			if (layout == Layout.GRIDBAG) {
+				GridBagConstraints c = ComponentHelper.createConstraints(child);
+				component.add(jComponent, c);
+			}
+			else {
+				component.add(jComponent);				
+			}
 
-			component.add(jComponent);
 
 			first = false;
 		}
@@ -100,16 +111,6 @@ public class Panel extends AbstractContainer<JPanel, Component>
 	public void setLayout(Layout layout)
 	{
 		this.layout = layout;
-	}
-
-	public Insets getInsets()
-	{
-		return insets;
-	}
-
-	public void setInsets(Insets insets)
-	{
-		this.insets = insets;
 	}
 	//</editor-fold>
 }

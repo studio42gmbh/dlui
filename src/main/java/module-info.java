@@ -33,6 +33,7 @@ module de.sft.dlui
 	
 	exports de.s42.dl.ui;
 	exports de.s42.dl.ui.actions;
+	exports de.s42.dl.ui.actions.web;
 	exports de.s42.dl.ui.annotations;
 	exports de.s42.dl.ui.bindings;
 	exports de.s42.dl.ui.components;

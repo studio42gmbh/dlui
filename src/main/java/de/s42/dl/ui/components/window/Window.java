@@ -30,6 +30,7 @@ import de.s42.dl.DLAttribute.AttributeDL;
 import static de.s42.dl.ui.components.AbstractComponent.COMPONENT_CLIENT_PROPERTY_KEY;
 import de.s42.dl.ui.components.AbstractContainer;
 import de.s42.dl.ui.components.Component;
+import de.s42.dl.ui.components.ComponentHelper;
 import de.s42.dl.ui.components.menu.Menu;
 import de.s42.dl.ui.events.EventAction;
 import java.awt.GridBagConstraints;
@@ -102,16 +103,7 @@ public class Window extends AbstractContainer<JFrame, Component>
 
 				JComponent jComponent = (JComponent) component.createSwingComponent();
 
-				GridBagConstraints c = new GridBagConstraints();
-				c.fill = component.getFill().flags;
-				c.anchor = component.getAnchor().flags;
-				c.gridwidth = component.getGridWidth();
-				c.gridheight = component.getGridHeight();
-				c.gridx = component.getGridX();
-				c.gridy = component.getGridY();
-				c.weightx = component.getWeightX();
-				c.weighty = component.getWeightY();
-				c.insets = component.getInsets();
+				GridBagConstraints c = ComponentHelper.createConstraints(component);
 
 				frame.getContentPane().add(jComponent, c);
 			}
