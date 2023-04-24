@@ -53,7 +53,7 @@ public class EventManager
 	{
 		boolean cleanup = false;
 
-		for (WeakReference<EventAction> actionRef : getReceivers(event)) {
+		for (WeakReference<EventAction> actionRef : new ArrayList<>(getReceivers(event))) {
 
 			EventAction action = actionRef.get();
 
