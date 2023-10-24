@@ -51,6 +51,8 @@ public class EventManager
 
 	public void send(Event event) throws Exception
 	{
+		assert event != null;
+
 		boolean cleanup = false;
 
 		for (WeakReference<EventAction> actionRef : new ArrayList<>(getReceivers(event))) {
@@ -71,6 +73,9 @@ public class EventManager
 
 	public synchronized void registerWeak(String eventName, EventAction action)
 	{
+		assert eventName != null;
+		assert action != null;
+
 		List<WeakReference<EventAction>> actions = actionsByEvent.get(eventName);
 
 		if (actions == null) {
@@ -80,9 +85,11 @@ public class EventManager
 
 		actions.add(new WeakReference(action));
 	}
-	
+
 	protected List<WeakReference<EventAction>> getReceivers(Event event)
 	{
+		assert event != null;
+
 		List<WeakReference<EventAction>> result = actionsByEvent.get(event.getName());
 
 		if (result != null) {
@@ -91,14 +98,17 @@ public class EventManager
 
 		return Collections.EMPTY_LIST;
 	}
-	
+
 	/**
 	 * Iterates all listeners and removed those that are cleared
 	 *
+	 * @param receivers
 	 * @return
 	 */
 	protected boolean cleanupReceivers(List<WeakReference<EventAction>> receivers)
 	{
+		assert receivers != null;
+
 		boolean cleared = false;
 
 		synchronized (receivers) {

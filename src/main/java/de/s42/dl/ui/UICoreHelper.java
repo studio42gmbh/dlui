@@ -83,16 +83,10 @@ public final class UICoreHelper
 	{
 		// never instantiated
 	}
-
-	public static void init(DLCore core) throws DLException, IOException
+	
+	
+	public static void initCoreTypes(DLCore core) throws DLException, IOException
 	{
-		// Pragmas
-		core.definePragma(new LoadPluginClassPragma());
-
-		// Annotations
-		core.defineAnnotationFactory(new ZoneAnnotation(), ZoneAnnotation.zone.class.getSimpleName());
-		core.defineAnnotationFactory(new EventAnnotation(), EventAnnotation.event.class.getSimpleName());
-
 		// Enums
 		core.defineType(core.createEnum(Anchor.class));
 		core.defineType(core.createEnum(Fill.class));
@@ -103,7 +97,20 @@ public final class UICoreHelper
 		core.defineType(new InsetsDLType(), "Insets");
 		core.defineType(new PointDLType(), "Point");
 		core.defineType(new DimensionDLType(), "Dimension");
-		core.defineType(core.createType(Font.class), "Font");
+		core.defineType(core.createType(Font.class), "Font");		
+	}
+	
+
+	public static void init(DLCore core) throws DLException, IOException
+	{
+		// Pragmas
+		core.definePragma(new LoadPluginClassPragma());
+
+		// Annotations
+		core.defineAnnotationFactory(new ZoneAnnotation(), ZoneAnnotation.zone.class.getSimpleName());
+		core.defineAnnotationFactory(new EventAnnotation(), EventAnnotation.event.class.getSimpleName());
+		
+		initCoreTypes(core);
 
 		// Event types
 		core.defineType(core.createType(Event.class), "Event");
