@@ -26,6 +26,8 @@
 package de.s42.dl.ui.events;
 
 import de.s42.dl.DLAttribute.AttributeDL;
+import de.s42.log.LogManager;
+import de.s42.log.Logger;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +42,7 @@ import java.util.Map;
  */
 public class EventManager
 {
+	private final static Logger log = LogManager.getLogger(EventManager.class.getName());
 
 	@AttributeDL(ignore = true)
 	protected final Map<String, List<WeakReference<EventAction>>> actionsByEvent = new HashMap<>();
@@ -85,7 +88,29 @@ public class EventManager
 
 		actions.add(new WeakReference(action));
 	}
+	
+	public synchronized boolean unregisterWeak(String eventName, EventAction action)
+	{
+		assert eventName != null;
+		assert action != null;
+		
+		//log.debug("unregisterWeak", eventName);
 
+		List<WeakReference<EventAction>> actions = actionsByEvent.get(eventName);
+
+		if (actions != null) {
+			for (WeakReference<EventAction> act : actions) {
+				if (act.refersTo(action)) {
+					actions.remove(act);
+					//log.debug("unregisterWeak:removing", eventName);
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	protected List<WeakReference<EventAction>> getReceivers(Event event)
 	{
 		assert event != null;
