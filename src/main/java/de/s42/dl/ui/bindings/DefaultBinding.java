@@ -29,8 +29,6 @@ import de.s42.base.beans.BeanHelper;
 import de.s42.base.beans.BeanInfo;
 import de.s42.base.beans.BeanProperty;
 import de.s42.base.beans.InvalidBean;
-import de.s42.log.LogManager;
-import de.s42.log.Logger;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,8 +44,7 @@ import java.util.Optional;
 public class DefaultBinding<ObjectType, DataType> extends AbstractBinding<ObjectType, DataType>
 {
 
-	private final static Logger log = LogManager.getLogger(DefaultBinding.class.getName());
-
+	//private final static Logger log = LogManager.getLogger(DefaultBinding.class.getName());
 	protected final ObjectType object;
 	protected final String name;
 
@@ -58,8 +55,8 @@ public class DefaultBinding<ObjectType, DataType> extends AbstractBinding<Object
 
 	public DefaultBinding(ObjectType object, String name) throws InvalidBean
 	{
-		assert object != null;
-		assert name != null;
+		assert object != null : "object != null";
+		assert name != null : "name != null";
 
 		this.object = object;
 		this.name = name;
@@ -122,7 +119,7 @@ public class DefaultBinding<ObjectType, DataType> extends AbstractBinding<Object
 	}
 
 	/**
-	 * Is intended to be called by referenced data object to lny updtae but not set the property into it again.
+	 * Is intended to be called by referenced data object to only update but not set the property into it again.
 	 *
 	 * @param value
 	 * @return

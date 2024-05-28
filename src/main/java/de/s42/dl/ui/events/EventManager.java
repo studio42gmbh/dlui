@@ -26,8 +26,6 @@
 package de.s42.dl.ui.events;
 
 import de.s42.dl.DLAttribute.AttributeDL;
-import de.s42.log.LogManager;
-import de.s42.log.Logger;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,23 +40,25 @@ import java.util.Map;
  */
 public class EventManager
 {
-	private final static Logger log = LogManager.getLogger(EventManager.class.getName());
 
+	//private final static Logger log = LogManager.getLogger(EventManager.class.getName());
 	@AttributeDL(ignore = true)
 	protected final Map<String, List<WeakReference<EventAction>>> actionsByEvent = new HashMap<>();
 
 	public void send(String eventName) throws Exception
 	{
+		assert eventName != null : "eventName != null";
+
 		send(new DefaultEvent(eventName));
 	}
 
 	public void send(Event event) throws Exception
 	{
-		assert event != null;
+		assert event != null : "event != null";
 
 		boolean cleanup = false;
 
-		for (WeakReference<EventAction> actionRef : new ArrayList<>(getReceivers(event))) {
+		for (WeakReference<EventAction> actionRef : new ArrayList<>(getReceivers(event.getName()))) {
 
 			EventAction action = actionRef.get();
 
@@ -70,14 +70,14 @@ public class EventManager
 		}
 
 		if (cleanup) {
-			cleanupReceivers(getReceivers(event));
+			cleanupReceivers(getReceivers(event.getName()));
 		}
 	}
 
 	public synchronized void registerWeak(String eventName, EventAction action)
 	{
-		assert eventName != null;
-		assert action != null;
+		assert eventName != null : "eventName != null";
+		assert action != null : "action != null";
 
 		List<WeakReference<EventAction>> actions = actionsByEvent.get(eventName);
 
@@ -88,14 +88,13 @@ public class EventManager
 
 		actions.add(new WeakReference(action));
 	}
-	
+
 	public synchronized boolean unregisterWeak(String eventName, EventAction action)
 	{
-		assert eventName != null;
-		assert action != null;
-		
-		//log.debug("unregisterWeak", eventName);
+		assert eventName != null : "eventName != null";
+		assert action != null : "action != null";
 
+		//log.debug("unregisterWeak", eventName);
 		List<WeakReference<EventAction>> actions = actionsByEvent.get(eventName);
 
 		if (actions != null) {
@@ -107,15 +106,15 @@ public class EventManager
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
-	protected List<WeakReference<EventAction>> getReceivers(Event event)
-	{
-		assert event != null;
 
-		List<WeakReference<EventAction>> result = actionsByEvent.get(event.getName());
+	protected List<WeakReference<EventAction>> getReceivers(String eventName)
+	{
+		assert eventName != null : "eventName != null";
+
+		List<WeakReference<EventAction>> result = actionsByEvent.get(eventName);
 
 		if (result != null) {
 			return result;
@@ -132,7 +131,7 @@ public class EventManager
 	 */
 	protected boolean cleanupReceivers(List<WeakReference<EventAction>> receivers)
 	{
-		assert receivers != null;
+		assert receivers != null : "receivers != null";
 
 		boolean cleared = false;
 
@@ -156,5 +155,33 @@ public class EventManager
 		}
 
 		return cleared;
+	}
+
+	/**
+	 * Cleans up all event listener lists by event name
+	 *
+	 * @return
+	 */
+	public boolean cleanup()
+	{
+		boolean cleanup = false;
+		for (String eventName : actionsByEvent.keySet()) {
+			cleanup &= cleanupReceivers(getReceivers(eventName));
+		}
+
+		return cleanup;
+	}
+
+	/**
+	 * Cleans up event listener list for one event name
+	 *
+	 * @param eventName
+	 * @return
+	 */
+	public boolean cleanup(String eventName)
+	{
+		assert eventName != null : "eventName != null";
+
+		return cleanupReceivers(getReceivers(eventName));
 	}
 }

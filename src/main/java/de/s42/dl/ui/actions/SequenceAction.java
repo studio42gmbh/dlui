@@ -30,6 +30,7 @@ import de.s42.dl.types.DLContainer;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,5 +59,11 @@ public class SequenceAction extends AbstractAction implements DLContainer<Action
 		assert child != null;
 
 		actions.add(child);
+	}
+
+	@Override
+	public List<Action> getChildren()
+	{
+		return Collections.unmodifiableList(actions);
 	}
 }

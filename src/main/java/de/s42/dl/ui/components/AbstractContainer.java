@@ -51,6 +51,12 @@ public abstract class AbstractContainer<ComponentType, ContainedComponentType> e
 		addComponent(child);
 	}
 
+	@Override
+	public List<ContainedComponentType> getChildren()
+	{
+		return Collections.unmodifiableList(components);
+	}
+
 	// <editor-fold desc="Getters/Setters" defaultstate="collapsed">
 	public List<ContainedComponentType> getComponents()
 	{

@@ -31,6 +31,7 @@ import de.s42.dl.types.DLContainer;
 import de.s42.log.LogManager;
 import de.s42.log.Logger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,10 +51,9 @@ public class SequenceEventAction<EventType extends Event> implements EventAction
 	public void perform(EventType event) throws Exception
 	{
 		for (Action action : actions) {
-			if (action instanceof EventAction) {
-				((EventAction)action).perform(event);
-			}
-			else {
+			if (action instanceof EventAction eventAction) {
+				eventAction.perform(event);
+			} else {
 				action.perform();
 			}
 		}
@@ -65,5 +65,11 @@ public class SequenceEventAction<EventType extends Event> implements EventAction
 		assert child != null;
 
 		actions.add(child);
+	}
+
+	@Override
+	public List<Action> getChildren()
+	{
+		return Collections.unmodifiableList(actions);
 	}
 }
